@@ -17,9 +17,11 @@ const emit = defineEmits(['change']);
 const computedData = computed(() => {
   return props.nodes.map(item => {
     item.checked = false;
+    item.isFolder = false;
 
     if (item.children) {
-      item.isOpen = false;
+      item.isFolder = true;
+      item.isFolderOpen = false;
     }
 
     return item;
@@ -27,7 +29,7 @@ const computedData = computed(() => {
 })
 
 function toggleExpanderItem (item) {
-  item.isOpen = !item.isOpen
+  item.isFolderOpen = !item.isFolderOpen
 }
 
 function changedItemStatus(item, parentEl) {
@@ -77,11 +79,11 @@ function changeParent(item, parent) {
         </app-checkbox>
 
         <button
-            v-if="Object.keys(item).includes('isOpen')"
+            v-if="item.isFolder"
             class="ml-auto"
             @click="toggleExpanderItem(item)"
         >
-          <template v-if="item.isOpen">
+          <template v-if="item.isFolderOpen">
             -
           </template>
           <template v-else>
@@ -90,7 +92,7 @@ function changeParent(item, parent) {
         </button>
       </div>
 
-      <div v-show="item.isOpen">
+      <div v-show="item.isFolderOpen">
         <app-treeview
             :nodes="item.children"
             :parent="item"
