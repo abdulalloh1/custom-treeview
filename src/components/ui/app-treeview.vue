@@ -4,15 +4,15 @@ import AppCheckbox from "./app-checkbox.vue";
 import type { INode } from "@/store/treeData";
 
 interface IProps {
-  nodes: INode[]
-  parent: INode
+  nodes?: INode[]
+  parent?: INode
 }
 
 const props = defineProps<IProps>();
 const emit = defineEmits(['change']);
 
 const computedData = computed(() => {
-  return props.nodes.map(item => {
+  return props.nodes?.map(item => {
     item.checked = false;
     item.isFolder = false;
 
