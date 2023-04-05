@@ -1,13 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps({
-  modelValue: Boolean
-})
+interface IProps {
+  modelValue: boolean
+}
+
+const props = defineProps<IProps>()
 
 const emit = defineEmits(['update:modelValue', 'change']);
 
-const randomID = String(Math.random());
+const randomID: string = String(Math.random());
 
 const computedModelValue = computed({
   get() {

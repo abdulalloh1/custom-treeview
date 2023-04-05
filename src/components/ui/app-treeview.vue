@@ -1,17 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 import AppCheckbox from "./app-checkbox.vue";
+import type { INode } from "@/store/treeData";
 
-const props = defineProps({
-  nodes: {
-    type: Array,
-    default: () => []
-  },
-  parent: {
-    type: Object,
-    default: null
-  }
-});
+interface IProps {
+  nodes: INode[]
+  parent: INode
+}
+
+const props = defineProps<IProps>();
 const emit = defineEmits(['change']);
 
 const computedData = computed(() => {
@@ -28,17 +25,17 @@ const computedData = computed(() => {
   });
 })
 
-function toggleExpanderItem (item) {
+function toggleExpanderItem (item: INode) {
   item.isFolderOpen = !item.isFolderOpen
 }
 
-function changedItemStatus(item, parentEl) {
+function changedItemStatus(item: INode, parentEl?: INode) {
   const parent = props.parent ?? parentEl;
 
   if (item.checked) {
     setChildrenStatus(item, true);
 
-    const isEveryChildChecked = parent?.children?.every(child => child.checked);
+    const isEveryChildChecked = parent?.children?.every((child: INode) => child.checked);
 
     if (isEveryChildChecked) parent.checked = true;
   }
@@ -48,7 +45,7 @@ function changedItemStatus(item, parentEl) {
     if (parent) parent.checked = false;
   }
 
-  function setChildrenStatus(item, status) {
+  function setChildrenStatus(item: INode, status: boolean) {
     item.checked = status;
     item.children?.forEach(child => setChildrenStatus(child, status));
   }
@@ -56,7 +53,7 @@ function changedItemStatus(item, parentEl) {
   emit('change', item, props.parent)
 }
 
-function changeParent(item, parent) {
+function changeParent(item: INode, parent: INode) {
   changedItemStatus(item, parent);
 }
 </script>
